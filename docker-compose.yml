@@ -1,0 +1,52 @@
+services:
+  vanseva-backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    container_name: vanseva-backend
+    restart: unless-stopped
+    ports:
+      - "8081:8081"
+    environment:
+      - PORT=8081
+      - DB_HOST=${DB_HOST:-cch-portal-mysql}
+      - DB_PORT=${DB_PORT:-3306}
+      - DB_NAME=${DB_NAME:-vanseva_ngo}
+      - DB_USER=${DB_USER:-cch_user}
+      - DB_PASS=${DB_PASS:-cch_portal_secure_pass_2026}
+      - NEXTCLOUD_URL=${NEXTCLOUD_URL:-http://cch-nextcloud:80}
+      - NEXTCLOUD_ADMIN_USER=${NEXTCLOUD_ADMIN_USER:-cch_admin}
+      - NEXTCLOUD_ADMIN_PASSWORD=${NEXTCLOUD_ADMIN_PASSWORD:-cch_admin_pass123}
+      - JWT_SECRET=${JWT_SECRET:-vanseva_green_earth_ngo_session_secure_key_2026}
+    networks:
+      - cch-network
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8081/actuator/health"]
+      interval: 15s
+      timeout: 5s
+      retries: 3
+      start_period: 30s
+
+  vanseva-frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    container_name: vanseva-frontend
+    restart: unless-stopped
+    ports:
+      - "3000:80"
+    depends_on:
+      vanseva-backend:
+        condition: service_healthy
+    networks:
+      - cch-network
+    healthcheck:
+      test: ["CMD", "wget", "-q", "--spider", "http://127.0.0.1/"]
+      interval: 15s
+      timeout: 5s
+      retries: 3
+      start_period: 10s
+
+networks:
+  cch-network:
+    external: true

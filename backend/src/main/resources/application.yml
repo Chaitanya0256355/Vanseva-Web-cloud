@@ -1,0 +1,70 @@
+server:
+  port: ${PORT:8081}
+  servlet:
+    session:
+      timeout: 60m
+      cookie:
+        name: VANSEVA_SESSION
+        http-only: true
+        secure: false # set to true if running over HTTPS
+        same-site: lax
+        path: /
+
+spring:
+  application:
+    name: vanseva-backend
+  datasource:
+    url: ${SPRING_DATASOURCE_URL:jdbc:mysql://${DB_HOST:localhost}:${DB_PORT:3306}/${DB_NAME:vanseva_ngo}?createDatabaseIfNotExist=true&useSSL=false&allowPublicKeyRetrieval=true&serverTimezone=UTC}
+    username: ${DB_USER:cch_user}
+    password: ${DB_PASS:cch_portal_secure_pass_2026}
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    hikari:
+      maximum-pool-size: 15
+      minimum-idle: 5
+      idle-timeout: 300000
+      connection-timeout: 20000
+  jpa:
+    hibernate:
+      ddl-auto: update
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.MySQLDialect
+        format_sql: false
+    show-sql: false
+  servlet:
+    multipart:
+      max-file-size: 25MB
+      max-request-size: 25MB
+
+# Nextcloud WebDAV Storage Configuration
+nextcloud:
+  url: ${NEXTCLOUD_URL:http://localhost:8080}
+  admin-username: ${NEXTCLOUD_ADMIN_USER:cch_admin}
+  admin-password: ${NEXTCLOUD_ADMIN_PASSWORD:cch_admin_pass123}
+  base-folder: Vanseva
+  webdav-endpoint: /remote.php/dav/files
+  timeout-seconds: 15
+
+# Vanseva App Configuration
+app:
+  jwt-secret: ${JWT_SECRET:vanseva_ultra_secure_jwt_token_secret_key_2026_green_earth_ngo}
+  cors:
+    allowed-origins:
+      - http://localhost:3000
+      - http://localhost:5173
+      - http://127.0.0.1:3000
+      - http://127.0.0.1:5173
+      - http://localhost
+  organization:
+    name: "Vanseva — Green Earth Foundation"
+    registration-number: "NGO-DL-2026-ENV-9081"
+    tax-exemption-note: "Contributions are acknowledged under environmental plantation CSR guidelines. Official tax deduction certificates are issued upon formal verification."
+    email: "contact@vanseva.org"
+    phone: "+91 98765 43210"
+    address: "Vanseva Sanctuary Campus, Eco Park Corridor, New Delhi 110001, India"
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info,metrics

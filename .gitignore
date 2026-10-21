@@ -1,0 +1,44 @@
+# Environment
+.env
+.env.local
+*.env
+
+# Java & Maven
+target/
+*.class
+*.jar
+*.war
+.m2/
+.flattened-pom.xml
+
+# Node & Frontend
+node_modules/
+frontend/node_modules/
+dist/
+frontend/dist/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+
+# IDE & OS
+.idea/
+*.iml
+.vscode/
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.sw?
+Thumbs.db
+[Dd]esktop.ini
+.DS_Store
+
+# Logs
+logs/
+*.log
+
+# Temporary test artifacts
+cookies.txt
+*.tmp
+*.pdf
